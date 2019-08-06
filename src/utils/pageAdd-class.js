@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import axios from 'axios';
-import feathers from '@feathersjs/feathers';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
@@ -51,20 +50,7 @@ class PageAdd extends React.Component{
             console.log(response);
         });
     }
-    addService(serviceName){
-        const url = "http://localhost:3030";
-        const newService = {
-            async find(params) {
-              return [];
-            },
-            async get(id, params) {},
-            async create(data, params) {},
-            async update(id, data, params) {},
-            async patch(id, data, params) {},
-            async remove(id, params) {}
-          }
-        feathers().use(serviceName,newService) 
-    }
+
 
     addPairNum(){
         this.setState({pairNum:this.state.pairNum + 1});
