@@ -1,5 +1,3 @@
-const feathers = require('@feathersjs/feathers');
-
 class Feathers {
   constructor() {
     this.messages = [];
@@ -59,7 +57,6 @@ class Feathers {
   }
 }
 
-const app = feathers();
 
 // Initialize the messages service by creating
 // a new instance of our class

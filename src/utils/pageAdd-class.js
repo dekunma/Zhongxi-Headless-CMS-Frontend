@@ -8,6 +8,26 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import client from './feathers';
 import Feathers from './FeathersModel';
+import { withStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
+
+const styles = theme => ({
+    name:{
+        maxWidth:300,
+        margin:8,
+    },
+    keyvalue:{
+        margin:20,
+        minWidth:100,
+    },
+    add:{
+        margin:20,
+    },
+    send:{
+        margin:20,
+    }
+  });
+
 class PageAdd extends React.Component{
     constructor(props){
         super(props);
@@ -24,25 +44,19 @@ class PageAdd extends React.Component{
         }
     }
     
+    
     valueNames = [
-        {
-            value   :   "String"
-        },
-        {
-            value   :   "Number"
-        },
-        {
-
-            value   :   "Boolean"
-        },
+        {value   :   "String"},
+        {value   :   "Number"},
+        {value   :   "Boolean"},
     ]
 
     sendModel = () =>{
-        const URL = "http://localhost:3030/models"
-        const data = {
-            Keys   : this.state.Key,
-            Values : this.state.Value,
-            Name   : this.state.Name
+        const URL   =   "http://localhost:3030/models"
+        const data  =   {
+            Keys   :    this.state.Key,
+            Values :    this.state.Value,
+            Name   :    this.state.Name
         };
         client.use(data.Name, new Feathers());
         axios.post(URL, data)
@@ -79,7 +93,9 @@ class PageAdd extends React.Component{
     handleChangeName = e =>{
         this.setState({Name:e.target.value})
     }
+    
     render(){
+        const {classes} = this.props;
         return(
             <div>   
 
@@ -89,31 +105,32 @@ class PageAdd extends React.Component{
                                     onChange={this.handleChangeName}
                                     margin="normal"
                                     variant="outlined"
+                                    className={classes.name}
                     />
 
                     <Grid container spacing = {3}>
                     {   
                         this.state.pairIDs.map(id => (
                             <div key = {id}>
-                                
-                                
-                                <Grid item lg={6}>
+                                <Grid item xs={6}>
                                 <TextField
                                     label={"Key "+ (id+1)}
                                     value={this.state.Key[id]}
                                     onChange={this.handleChangeKey(id)}
                                     margin="normal"
                                     variant="outlined"
+                                    className={classes.keyvalue}
                                 />
                                 </Grid>
 
-                                <Grid item lg={6}>
+                                <Grid item xs={6}>
                                     <TextField
                                         select
                                         variant="outlined"
                                         label={"Value "+(id+1)}
                                         value={this.state.Value[id]}
                                         onChange={this.handleChangeValue(id)}
+                                        className={classes.keyvalue}
                                     >
                                         {this.valueNames.map(option => (
                                         <MenuItem key={option.value} value={option.value}>
@@ -127,19 +144,20 @@ class PageAdd extends React.Component{
                     }
                     </Grid>
                     
-                    <Fab color="primary" aria-label="add" onClick={this.addPairNum} >
+                    <Fab className={classes.add} color="primary" aria-label="add" onClick={this.addPairNum} >
                         <AddIcon />
                     </Fab>
-                    <Button variant="contained" color="primary" onClick={this.sendModel}>
+                    <br/>
+                    <Button className={classes.send} variant="contained" color="primary" onClick={this.sendModel}>
                         Send Data
                     </Button>
-                
                 </div>
         )
     }
-        
-    
-
 }
 
-export default PageAdd;
+PageAdd.propTypes = {
+    classes: PropTypes.object.isRequired,
+  };
+
+export default withStyles(styles)(PageAdd)

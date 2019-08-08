@@ -8,8 +8,6 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
-
-
 const styles = theme => ({
     card: {
         maxWidth: 400,
@@ -27,7 +25,6 @@ const styles = theme => ({
         marginBottom: 12,
       },
   });
-  
 
 class pageManage extends React.Component{
     constructor(props){
