@@ -6,6 +6,8 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
+import client from './feathers';
+import Feathers from './FeathersModel';
 class PageAdd extends React.Component{
     constructor(props){
         super(props);
@@ -35,13 +37,14 @@ class PageAdd extends React.Component{
         },
     ]
 
-    sendModel(){
+    sendModel = () =>{
         const URL = "http://localhost:3030/models"
         const data = {
             Keys   : this.state.Key,
             Values : this.state.Value,
             Name   : this.state.Name
-        }
+        };
+        client.use(data.Name, new Feathers());
         axios.post(URL, data)
         .then(function (response) {
             console.log(response);
@@ -128,7 +131,7 @@ class PageAdd extends React.Component{
                         <AddIcon />
                     </Fab>
                     <Button variant="contained" color="primary" onClick={this.sendModel}>
-                        Primary
+                        Send Data
                     </Button>
                 
                 </div>
