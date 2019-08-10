@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import { Grid } from '@material-ui/core';
 
 const styles = theme => ({
     card: {
@@ -24,6 +25,9 @@ const styles = theme => ({
       pos: {
         marginBottom: 12,
       },
+      white:{
+          color:'rgba(255,255,255,0.5)',
+      }
   });
 
 class pageManage extends React.Component{
@@ -31,9 +35,9 @@ class pageManage extends React.Component{
         super(props);
         this.getData = this.getData.bind(this);
         this.state = {
-            names   :   [],
-            keys    :   [],
-            values  :   []
+            names       :   [],
+            keys        :   [],
+            values      :   []
         }
     }
 
@@ -53,8 +57,7 @@ class pageManage extends React.Component{
             this.setState({
                 names       :   nameArray,
                 keys        :   keyArray,
-                values      :   valueArray,
-                idCounter   :   0,
+                values      :   valueArray
             })
         })
         .catch(function (response) {
@@ -66,41 +69,52 @@ class pageManage extends React.Component{
         this.getData();       
     }
     render(){
-        const { classes } = this.props;
+        const { classes }   =   this.props;
+        var idCounter       =   0;
         return(
-            <div>
+            <Grid container>
+                <Grid item lg={4}>
                 {this.state.names.map(name => (
-                    <Card key = {name} className={classes.card}>
+                    <Card key = {this.state.idCounter} className={classes.card}>
                         <CardContent>
                             <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            Model Name:
+                            Service Name:
                             </Typography>
                             <Typography variant="h5" component="h2">
                             {name}
                             </Typography>
-                            
-                            <Typography className={classes.pos} color="textSecondary">
-                            Keys:
-                            </Typography>
-                            <Typography variant="body2" component="p">
-                            
-                            </Typography>
+                            <Grid container>
+                                <Grid item xs={6}>
+                                    
+                                    <Typography className={classes.pos} color="textSecondary">Keys:</Typography>
+                                    <Typography variant="body2" component="p">
+                                    <ul>
+                                        {this.state.keys[idCounter].map(key=>(<li>{key}</li>))}
+                                    </ul>
+                                    </Typography>
+                                </Grid>
 
-                            <Typography className={classes.pos} color="textSecondary">
-                            Format:
-                            </Typography>
-                            <Typography variant="body2" component="p">
-                            
-                            </Typography>
+                                <Grid item xs={6}>
+                                    
+                                    <Typography className={classes.pos} color="textSecondary">Value Type:</Typography>
+                                    <Typography variant="body2" component="p">
+                                    <ul>
+                                        {this.state.values[idCounter].map(value=>(<li>{value}</li>))}
+                                    </ul>
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                        
                             
                         </CardContent>
                         <CardActions>
-                            <Button size="small">Learn More</Button>
+                            <Button size="small">Manage</Button>
                         </CardActions>
+                        <div className={classes.white}>{idCounter++}</div>
                     </Card>
                 ))}
-                
-            </div>
+                </Grid>
+            </Grid>
         )
     }
 

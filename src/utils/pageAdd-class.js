@@ -3,6 +3,7 @@ import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import Fab from '@material-ui/core/Fab';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
@@ -21,10 +22,10 @@ const styles = theme => ({
         minWidth:100,
     },
     add:{
-        margin:20,
+        margin:10,
     },
     send:{
-        margin:20,
+        margin:10,
     }
   });
 
@@ -49,6 +50,7 @@ class PageAdd extends React.Component{
         {value   :   "String"},
         {value   :   "Number"},
         {value   :   "Boolean"},
+        {value   :   "Array"},
     ]
 
     sendModel = () =>{
@@ -59,6 +61,13 @@ class PageAdd extends React.Component{
             Name   :    this.state.Name
         };
         client.use(data.Name, new Feathers());
+        this.setState({
+            Keys    :   [],
+            Values  :   [],
+            Name    :   "",
+            pairNum :   0,
+            pairIDs :   []
+        })
         axios.post(URL, data)
         .then(function (response) {
             console.log(response);
@@ -70,22 +79,25 @@ class PageAdd extends React.Component{
 
 
     addPairNum(){
-        this.setState({pairNum:this.state.pairNum + 1});
         this.state.pairIDs.push(this.state.pairNum);
+        this.setState({pairNum:this.state.pairNum + 1});
+    }
+
+    minusPairNum = ()=>{
+        this.setState({pairNum:this.state.pairNum - 1});
+        this.state.pairIDs.pop(this.state.pairNum);
 
     }
 
     handleChangeKey = id =>event => {
-            var currentKey = this.state.Key[id];
-            currentKey = event.target.value;
+            var currentKey = event.target.value;
             var currentArray = this.state.Key;
             currentArray[id] = currentKey;
             this.setState({Key:currentArray})
       };
 
     handleChangeValue = id =>event => {
-        var currentValue = this.state.Value[id];
-        currentValue = event.target.value;
+        var currentValue = event.target.value;
         var currentArray = this.state.Value;
         currentArray[id] = currentValue;
         this.setState({Value:currentArray})
@@ -100,7 +112,7 @@ class PageAdd extends React.Component{
             <div>   
 
                     <TextField
-                                    label="Name"
+                                    label="Name of New Service"
                                     value={this.state.Name}
                                     onChange={this.handleChangeName}
                                     margin="normal"
@@ -147,6 +159,9 @@ class PageAdd extends React.Component{
                     <Fab className={classes.add} color="primary" aria-label="add" onClick={this.addPairNum} >
                         <AddIcon />
                     </Fab>
+                    {
+                        this.state.pairNum > 0 ? <Fab className={classes.add} color="primary" aria-label="remove" onClick={this.minusPairNum} ><RemoveIcon /></Fab> : <div/>
+                    }
                     <br/>
                     <Button className={classes.send} variant="contained" color="primary" onClick={this.sendModel}>
                         Send Data
