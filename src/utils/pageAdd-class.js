@@ -9,7 +9,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import client from './feathers';
 import Feathers from './FeathersModel';
-import { withStyles } from '@material-ui/core';
+import { withStyles, Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
@@ -119,7 +119,13 @@ class PageAdd extends React.Component{
                                     variant="outlined"
                                     className={classes.name}
                     />
-
+                    <Fab className={classes.add} color="primary" aria-label="add" onClick={this.addPairNum} >
+                        <AddIcon />
+                    </Fab>
+                    {
+                        this.state.pairNum > 0 ? <Fab className={classes.add} color="primary" aria-label="remove" onClick={this.minusPairNum} ><RemoveIcon /></Fab> : <div/>
+                    }
+                    <Divider/>
                     <Grid container spacing = {3}>
                     {   
                         this.state.pairIDs.map(id => (
@@ -151,17 +157,14 @@ class PageAdd extends React.Component{
                                         ))}
                                     </TextField>
                                 </Grid>
+                                <Divider/>
                             </div>
                     ))
                     }
+                   
                     </Grid>
                     
-                    <Fab className={classes.add} color="primary" aria-label="add" onClick={this.addPairNum} >
-                        <AddIcon />
-                    </Fab>
-                    {
-                        this.state.pairNum > 0 ? <Fab className={classes.add} color="primary" aria-label="remove" onClick={this.minusPairNum} ><RemoveIcon /></Fab> : <div/>
-                    }
+                  
                     <br/>
                     <Button className={classes.send} variant="contained" color="primary" onClick={this.sendModel}>
                         Send Data

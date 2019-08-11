@@ -12,7 +12,7 @@ import { Grid } from '@material-ui/core';
 const styles = theme => ({
     card: {
         maxWidth: 400,
-        margin:50,
+        maxHeight: 400,
       },
       bullet: {
         display: 'inline-block',
@@ -72,49 +72,52 @@ class pageManage extends React.Component{
         const { classes }   =   this.props;
         var idCounter       =   0;
         return(
-            <Grid container>
-                <Grid item lg={4}>
+            <Grid container spacing={5}>
+                
                 {this.state.names.map(name => (
-                    <Card key = {this.state.idCounter} className={classes.card}>
-                        <CardContent>
-                            <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            Service Name:
-                            </Typography>
-                            <Typography variant="h5" component="h2">
-                            {name}
-                            </Typography>
-                            <Grid container>
-                                <Grid item xs={6}>
-                                    
-                                    <Typography className={classes.pos} color="textSecondary">Keys:</Typography>
-                                    <Typography variant="body2" component="p">
-                                    <ul>
-                                        {this.state.keys[idCounter].map(key=>(<li>{key}</li>))}
-                                    </ul>
-                                    </Typography>
-                                </Grid>
+                    <Grid item xs={12} >
+                        <Card key = {this.state.idCounter} className={classes.card}>
+                            <CardContent>
+                                <Typography className={classes.title} color="textSecondary" gutterBottom>
+                                Service Name:
+                                </Typography>
+                                <Typography variant="h5" component="h2">
+                                {name}
+                                </Typography>
+                                <Grid container>
+                                    <Grid item xs={12} sm={6}>
+                                        
+                                        <Typography className={classes.pos} color="textSecondary">Keys:</Typography>
+                                        <Typography variant="body2" component="p">
+                                        <ul>
+                                            {this.state.keys[idCounter].map(key=>(<li>{key}</li>))}
+                                        </ul>
+                                        </Typography>
+                                    </Grid>
 
-                                <Grid item xs={6}>
-                                    
-                                    <Typography className={classes.pos} color="textSecondary">Value Type:</Typography>
-                                    <Typography variant="body2" component="p">
-                                    <ul>
-                                        {this.state.values[idCounter].map(value=>(<li>{value}</li>))}
-                                    </ul>
-                                    </Typography>
+                                    <Grid item xs={12} sm={6}>
+                                        
+                                        <Typography className={classes.pos} color="textSecondary">Value Type:</Typography>
+                                        <Typography variant="body2" component="p">
+                                        <ul>
+                                            {this.state.values[idCounter].map(value=>(<li>{value}</li>))}
+                                        </ul>
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        
                             
-                        </CardContent>
-                        <CardActions>
-                            <Button size="small">Manage</Button>
-                        </CardActions>
-                        <div className={classes.white}>{idCounter++}</div>
-                    </Card>
+                                
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small">Manage</Button>
+                            </CardActions>
+                            <div className={classes.white}>{idCounter++}</div>
+                        </Card>
+                    </Grid>
                 ))}
-                </Grid>
+                
             </Grid>
+            
         )
     }
 
