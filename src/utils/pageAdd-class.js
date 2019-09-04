@@ -7,8 +7,6 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import Fab from '@material-ui/core/Fab';
 import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
-import client from './feathers';
-import Feathers from './FeathersModel';
 import { withStyles, Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
@@ -35,11 +33,11 @@ class PageAdd extends React.Component{
         this.addPairNum = this.addPairNum.bind(this);
         this.handleChangeKey = this.handleChangeKey.bind(this);
         this.handleChangeValue = this.handleChangeValue.bind(this);
-        this.sendModel = this.sendModel.bind(this)
+        this.sendData = this.sendData.bind(this)
         this.state = {
-            Key     :   [],
-            Value   :   [],
-            Name    :   "",
+            key     :   [],
+            value   :   [],
+            name    :   "",
             pairNum :   0,
             pairIDs :   []
         }
@@ -53,22 +51,25 @@ class PageAdd extends React.Component{
         {value   :   "Array"},
     ]
 
-    sendModel = () =>{
-        const URL   =   "http://localhost:3030/models"
+    sendData = () =>{
+        const servicesURL   =   "http://localhost:3030/services";
+        const dataURL       =   "http://localhost:3030/data"
         const data  =   {
-            Keys   :    this.state.Key,
-            Values :    this.state.Value,
-            Name   :    this.state.Name
+            keys   :    this.state.key,
+            values :    this.state.value,
+            name   :    this.state.name
         };
-        client.use(data.Name, new Feathers());
+
+
         this.setState({
-            Keys    :   [],
-            Values  :   [],
-            Name    :   "",
+            keys    :   [],
+            values  :   [],
+            name    :   "",
             pairNum :   0,
             pairIDs :   []
         })
-        axios.post(URL, data)
+        axios.post(servicesURL, data)
+        axios.post(dataURL, data)
         .then(function (response) {
             console.log(response);
         })
@@ -86,24 +87,23 @@ class PageAdd extends React.Component{
     minusPairNum = ()=>{
         this.setState({pairNum:this.state.pairNum - 1});
         this.state.pairIDs.pop(this.state.pairNum);
-
     }
 
     handleChangeKey = id =>event => {
             var currentKey = event.target.value;
-            var currentArray = this.state.Key;
+            var currentArray = this.state.key;
             currentArray[id] = currentKey;
-            this.setState({Key:currentArray})
+            this.setState({key:currentArray})
       };
 
     handleChangeValue = id =>event => {
         var currentValue = event.target.value;
-        var currentArray = this.state.Value;
+        var currentArray = this.state.value;
         currentArray[id] = currentValue;
-        this.setState({Value:currentArray})
+        this.setState({value:currentArray})
   };
     handleChangeName = e =>{
-        this.setState({Name:e.target.value})
+        this.setState({name:e.target.value})
     }
     
     render(){
@@ -113,7 +113,7 @@ class PageAdd extends React.Component{
 
                     <TextField
                                     label="Name of New Service"
-                                    value={this.state.Name}
+                                    value={this.state.name}
                                     onChange={this.handleChangeName}
                                     margin="normal"
                                     variant="outlined"
@@ -133,7 +133,7 @@ class PageAdd extends React.Component{
                                 <Grid item xs={6}>
                                 <TextField
                                     label={"Key "+ (id+1)}
-                                    value={this.state.Key[id]}
+                                    value={this.state.key[id]}
                                     onChange={this.handleChangeKey(id)}
                                     margin="normal"
                                     variant="outlined"
@@ -146,7 +146,7 @@ class PageAdd extends React.Component{
                                         select
                                         variant="outlined"
                                         label={"Value "+(id+1)}
-                                        value={this.state.Value[id]}
+                                        value={this.state.value[id]}
                                         onChange={this.handleChangeValue(id)}
                                         className={classes.keyvalue}
                                     >
@@ -166,7 +166,7 @@ class PageAdd extends React.Component{
                     
                   
                     <br/>
-                    <Button className={classes.send} variant="contained" color="primary" onClick={this.sendModel}>
+                    <Button className={classes.send} variant="contained" color="primary" onClick={this.sendData}>
                         Send Data
                     </Button>
                 </div>

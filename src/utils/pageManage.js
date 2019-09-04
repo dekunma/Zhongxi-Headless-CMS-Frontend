@@ -8,6 +8,7 @@ import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const styles = theme => ({
     card: {
@@ -27,6 +28,9 @@ const styles = theme => ({
       },
       white:{
           color:'rgba(255,255,255,0.5)',
+      },
+      root: {
+        flexGrow: 1,
       }
   });
 
@@ -35,30 +39,26 @@ class pageManage extends React.Component{
         super(props);
         this.getData = this.getData.bind(this);
         this.state = {
-            names       :   [],
-            keys        :   [],
-            values      :   []
+            services : [],
+            loading  : false,
         }
     }
 
     getData(){
-        const URL = "http://localhost:3030/models";
+        this.setState({loading:true})
+        const URL = "http://localhost:3030/services";
         axios.get(URL)
         .then(response => {
-            var nameArray   =   [];
-            var keyArray   =   [];
-            var valueArray  =   [];
+            var services = [];
             for(var ii=0; ii<response.data.data.length; ii++){
-                nameArray.push(response.data.data[ii].Name);
-                keyArray.push(response.data.data[ii].Keys);
-                valueArray.push(response.data.data[ii].Values);
+                services.push(response.data.data[ii])
             }
             
             this.setState({
-                names       :   nameArray,
-                keys        :   keyArray,
-                values      :   valueArray
+                services    :   services,
+                loading     :   false
             })
+            console.log(this.state.services)
         })
         .catch(function (response) {
             console.log(response);
@@ -70,27 +70,31 @@ class pageManage extends React.Component{
     }
     render(){
         const { classes }   =   this.props;
-        var idCounter       =   0;
+        const state         =   this.state;
+        var idCounter       =   0; 
+        
         return(
+            this.state.loading
+            ?
+            <LinearProgress/>
+            :
             <Grid container spacing={5}>
-                
-                {this.state.names.map(name => (
-                    <Grid item xs={12} >
-                        <Card key = {this.state.idCounter} className={classes.card}>
+                {state.services.map(service => (
+                    <Grid key = {this.state.idCounter} item xs={12} >
+                        <Card  className={classes.card}>
                             <CardContent>
                                 <Typography className={classes.title} color="textSecondary" gutterBottom>
                                 Service Name:
                                 </Typography>
                                 <Typography variant="h5" component="h2">
-                                {name}
+                                {service.name}
                                 </Typography>
                                 <Grid container>
                                     <Grid item xs={12} sm={6}>
-                                        
                                         <Typography className={classes.pos} color="textSecondary">Keys:</Typography>
                                         <Typography variant="body2" component="p">
                                         <ul>
-                                            {this.state.keys[idCounter].map(key=>(<li>{key}</li>))}
+                                            {service.keys.map(key=>(<li>{key}</li>))}
                                         </ul>
                                         </Typography>
                                     </Grid>
@@ -100,13 +104,11 @@ class pageManage extends React.Component{
                                         <Typography className={classes.pos} color="textSecondary">Value Type:</Typography>
                                         <Typography variant="body2" component="p">
                                         <ul>
-                                            {this.state.values[idCounter].map(value=>(<li>{value}</li>))}
+                                            {service.values.map(value=>(<li>{value}</li>))}
                                         </ul>
                                         </Typography>
                                     </Grid>
                                 </Grid>
-                            
-                                
                             </CardContent>
                             <CardActions>
                                 <Button size="small">Manage</Button>
@@ -115,9 +117,7 @@ class pageManage extends React.Component{
                         </Card>
                     </Grid>
                 ))}
-                
             </Grid>
-            
         )
     }
 

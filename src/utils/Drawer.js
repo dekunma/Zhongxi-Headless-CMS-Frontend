@@ -18,7 +18,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import PageAdd from './pageAdd-class';
 import BuildIcon from '@material-ui/icons/Build';
-import PageManage from './pageManage'
+import PageManage from './pageManage';
+import Login from './Login';
+import client from './feathers'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -82,7 +84,8 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState({
-    page:"default"
+    page:"default",
+    login:false
   });
   function handleDrawerOpen() {
     setOpen(true);
@@ -98,6 +101,14 @@ export default function PersistentDrawerLeft() {
   function pageManage(){
     setValues({page:"Manage"})
   }
+
+  function changeLogin(){
+    client.on('authenticated', login => {
+      setValues({login:true})
+    });
+    return(<Login/>)
+  }
+  
 
   return (
     <div className={classes.root}>
@@ -157,8 +168,8 @@ export default function PersistentDrawerLeft() {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.drawerHeader} />
-          {values.page === "Add" ? <PageAdd/> : <PageManage/>}
+        <div className={classes.drawerHeader} /> 
+          {values.login ? values.page === "Add" ? <PageAdd/> : <PageManage/> : changeLogin()}
       </main>
     </div>
   );
