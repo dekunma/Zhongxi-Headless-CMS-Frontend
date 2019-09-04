@@ -16,7 +16,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
-import PageAdd from './pageAdd-class';
+import PageAdd from './pageAdd';
 import BuildIcon from '@material-ui/icons/Build';
 import PageManage from './pageManage';
 import Login from './Login';
@@ -95,18 +95,24 @@ export default function PersistentDrawerLeft() {
     setOpen(false);
   }
   function pageAdd(){
-    setValues({page:"Add"})
+    setValues({page:"Add", login:true});
+    return(<PageAdd/>)
   }
 
   function pageManage(){
-    setValues({page:"Manage"})
+    setValues({page:"Manage", login:true});
   }
 
   function changeLogin(){
     client.on('authenticated', login => {
-      setValues({login:true})
+      setValues({login:true, page:"Manage"})
     });
-    return(<Login/>)
+  }
+
+  function changePage(){
+    if(!values.login){changeLogin(); return(<Login/>)}
+    else if (values.page==="Add"){return(<PageAdd/>)}
+    else if (values.page==="Manage"){return(<PageManage/>)}
   }
   
 
@@ -169,7 +175,7 @@ export default function PersistentDrawerLeft() {
         })}
       >
         <div className={classes.drawerHeader} /> 
-          {values.login ? values.page === "Add" ? <PageAdd/> : <PageManage/> : changeLogin()}
+          {changePage()}
       </main>
     </div>
   );

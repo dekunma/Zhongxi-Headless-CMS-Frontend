@@ -60,16 +60,15 @@ class PageAdd extends React.Component{
             name   :    this.state.name
         };
 
-
         this.setState({
-            keys    :   [],
-            values  :   [],
+            key     :   [],
+            value   :   [],
             name    :   "",
             pairNum :   0,
             pairIDs :   []
         })
         axios.post(servicesURL, data)
-        axios.post(dataURL, data)
+        axios.post(dataURL, [])
         .then(function (response) {
             console.log(response);
         })

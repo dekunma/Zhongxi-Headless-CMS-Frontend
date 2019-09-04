@@ -58,7 +58,6 @@ class pageManage extends React.Component{
                 services    :   services,
                 loading     :   false
             })
-            console.log(this.state.services)
         })
         .catch(function (response) {
             console.log(response);
@@ -94,7 +93,7 @@ class pageManage extends React.Component{
                                         <Typography className={classes.pos} color="textSecondary">Keys:</Typography>
                                         <Typography variant="body2" component="p">
                                         <ul>
-                                            {service.keys.map(key=>(<li>{key}</li>))}
+                                            {service.keys.map(key=>(<li key={key}>{key}</li>))}
                                         </ul>
                                         </Typography>
                                     </Grid>
@@ -104,7 +103,7 @@ class pageManage extends React.Component{
                                         <Typography className={classes.pos} color="textSecondary">Value Type:</Typography>
                                         <Typography variant="body2" component="p">
                                         <ul>
-                                            {service.values.map(value=>(<li>{value}</li>))}
+                                            {service.values.map(value=>(<li key={value}>{value}</li>))}
                                         </ul>
                                         </Typography>
                                     </Grid>
