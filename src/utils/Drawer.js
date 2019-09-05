@@ -84,9 +84,9 @@ export default function PersistentDrawerLeft() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState({
-    page:"default",
-    login:false
+    page:"",
   });
+    
   function handleDrawerOpen() {
     setOpen(true);
   }
@@ -105,18 +105,29 @@ export default function PersistentDrawerLeft() {
 
   function changeLogin(){
     client.on('authenticated', login => {
-      setValues({login:true, page:"Manage"})
+      setValues({login:true, page:"Manage"});
+      return(<PageManage/>)
     });
+      return(<Login/>);
   }
 
   function changePage(){
-    if(!values.login){changeLogin(); return(<Login/>)}
-    else if (values.page==="Add"){return(<PageAdd/>)}
+    changeLogin()
+    if (values.page==="Add"){return(<PageAdd/>)}
     else if (values.page==="Manage"){return(<PageManage/>)}
   }
   
+  function componentDidMount(){
+    client.authenticate().catch(() => this.setState({ login: null }));
+    client.on('authenticated', login => {
+      setValues({login:true, page:"Manage"})
+    });
 
+  }
+  componentDidMount();
   return (
+    
+    
     <div className={classes.root}>
       <CssBaseline />
       <AppBar

@@ -69,7 +69,6 @@ class pageManage extends React.Component{
     }
     render(){
         const { classes }   =   this.props;
-        const state         =   this.state;
         var idCounter       =   0; 
         
         return(
@@ -78,7 +77,7 @@ class pageManage extends React.Component{
             <LinearProgress/>
             :
             <Grid container spacing={5}>
-                {state.services.map(service => (
+                {this.state.services.map(service => (
                     <Grid key = {this.state.idCounter} item xs={12} >
                         <Card  className={classes.card}>
                             <CardContent>
