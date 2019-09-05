@@ -85,21 +85,17 @@ const styles = theme => ({
 class MainPage extends React.Component {
   constructor(props){
     super(props);
+    this.changeLoginState = this.changeLoginState.bind(this);
     this.state = {
         open: false,
         page: "Manage"
       };
   }
   componentDidMount(){
-    client.authenticate().catch(() => this.setState({ login: null }));
     try {
-      // First try to log in with an existing JWT
      client.reAuthenticate();
      this.setState({login:true})
     } catch (error) {
-      // If that errors, log in with email/password
-      // Here we would normally show a login page
-      // to get the login information
       this.setState({login:false})
     }
   }
@@ -110,6 +106,11 @@ class MainPage extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+
+  changeLoginState(loginState){
+    this.setState({login:loginState})
+  }
+
 
   render() {
     const { classes, theme } = this.props;
@@ -160,7 +161,7 @@ class MainPage extends React.Component {
                     <Divider />
                       <List>
                         <Link to="add">
-                          <ListItem button key='1' as={Link} to="add" name="PageAdd">
+                          <ListItem button key='1'>
                             <ListItemIcon><AddIcon/></ListItemIcon>
                             <ListItemText primary="Add a New Service" />
                           </ListItem>
@@ -169,27 +170,27 @@ class MainPage extends React.Component {
                       <Divider />
                       <List>
                         <Link to="manage">
-                          <ListItem button key='2' as={Link} to="manage" name="PageManage" >
+                          <ListItem button key='2'  >
                             <ListItemIcon><BuildIcon/></ListItemIcon>
                             <ListItemText primary="Manage All Services" />
                           </ListItem>
                         </Link>
                       </List>
                 </Drawer>
-              <main
-                className={classNames(classes.content, {
-                  [classes.contentShift]: open,
-                })}
-              >
-                <div className={classes.drawerHeader} />
-                <Route path = "/add" exact={true} component={PageAdd} />
-                <Route path = "/manage" exact={true} component={PageManage} />
-              </main>
+                <main
+                  className={classNames(classes.content, {
+                    [classes.contentShift]: open,
+                  })}
+                >
+                  <div className={classes.drawerHeader} />
+                  <Route path = "/add" exact={true} component={PageAdd} />
+                  <Route path = "/manage" exact={true} component={PageManage} />
+                </main>
               </BrowserRouter>
             </div>
           );
       }
-      return <Login />;
+      return <Login changeLogin={(loginState)=>{this.changeLoginState(loginState)}}></Login>;
   }
 }
 
