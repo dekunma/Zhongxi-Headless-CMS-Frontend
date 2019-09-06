@@ -58,6 +58,7 @@ class pageManage extends React.Component{
                 services    :   services,
                 loading     :   false
             })
+            console.log(response)
         })
         .catch(function (response) {
             console.log(response);

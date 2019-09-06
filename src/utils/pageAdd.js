@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import AddIcon from '@material-ui/icons/Add';
@@ -9,6 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Button from '@material-ui/core/Button';
 import { withStyles, Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import client from './feathers'
 
 const styles = theme => ({
     name:{
@@ -52,8 +52,6 @@ class PageAdd extends React.Component{
     ]
 
     sendData = () =>{
-        const servicesURL   =   "http://localhost:3030/services";
-        const dataURL       =   "http://localhost:3030/data"
         const data  =   {
             keys   :    this.state.key,
             values :    this.state.value,
@@ -67,14 +65,15 @@ class PageAdd extends React.Component{
             pairNum :   0,
             pairIDs :   []
         })
-        axios.post(servicesURL, data)
-        axios.post(dataURL, [])
-        .then(function (response) {
-            console.log(response);
-        })
-        .catch(function (response) {
-            console.log(response);
-        });
+        client.service('services').create(data)
+        // client.service('services').find().then((r)=>console.log(r));
+        // console.log(client.service('users').find())
+                
+        // var getAuthentication = async function (){
+        //     console.log(await client.get('authentication'));
+        //   }
+        // getAuthentication()
+        client.logout()
     }
 
 

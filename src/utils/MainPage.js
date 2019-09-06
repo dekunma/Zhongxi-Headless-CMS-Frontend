@@ -23,6 +23,7 @@ import PageManage from './pageManage';
 import Login from './Login';
 import client from './feathers'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
+import { async } from 'q';
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -85,20 +86,26 @@ const styles = theme => ({
 class MainPage extends React.Component {
   constructor(props){
     super(props);
-    this.changeLoginState = this.changeLoginState.bind(this);
     this.state = {
         open: false,
         page: "Manage"
       };
   }
-  componentDidMount(){
-    try {
-     client.reAuthenticate();
-     this.setState({login:true})
-    } catch (error) {
-      this.setState({login:false})
-    }
+  componentDidMount() {
+    // Try to authenticate with the JWT stored in localStorage
+    client.authenticate().catch(() => this.setState({ login: null }));
+
+   
+    // On successfull login
+    client.on('authenticated', login => {
+      // Get all users and messages
+      Promise.all([
+      ]).then( (e) => {
+        this.setState({ login });
+      });
+    });
   }
+
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -107,10 +114,9 @@ class MainPage extends React.Component {
     this.setState({ open: false });
   };
 
-  changeLoginState(loginState){
-    this.setState({login:loginState})
+  logout(){
+    client.logout();
   }
-
 
   render() {
     const { classes, theme } = this.props;
@@ -176,6 +182,13 @@ class MainPage extends React.Component {
                           </ListItem>
                         </Link>
                       </List>
+                      <Divider />
+                      <List>
+                          <ListItem button key='3' onClick={this.logout} >
+                            <ListItemIcon><BuildIcon/></ListItemIcon>
+                            <ListItemText primary="Logout" />
+                          </ListItem>
+                      </List>
                 </Drawer>
                 <main
                   className={classNames(classes.content, {
@@ -190,7 +203,7 @@ class MainPage extends React.Component {
             </div>
           );
       }
-      return <Login changeLogin={(loginState)=>{this.changeLoginState(loginState)}}></Login>;
+      return <Login/>;
   }
 }
 

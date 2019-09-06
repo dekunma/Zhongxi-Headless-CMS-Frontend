@@ -34,19 +34,11 @@ class Login extends Component {
 
   login() {
     const { email, password } = this.state;
-    console.log(client.authenticate({
+    
+    return client.authenticate({
       strategy: 'local',
       email, password
-    }).catch(error => this.setState({ error })))
-    try{
-      client.authenticate({
-        strategy: 'local',
-        email, password
-      });
-    } catch(error){
-      this.setState({ error });
-      this.props.changeLogin(false);
-    }
+    }).catch(error => this.setState({ error }));
   }
 
   signup() {
