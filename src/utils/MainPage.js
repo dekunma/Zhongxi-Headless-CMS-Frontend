@@ -23,7 +23,8 @@ import PageManage from './pageManage';
 import Login from './Login';
 import client from './feathers'
 import { BrowserRouter, Route, Link } from 'react-router-dom'
-import { async } from 'q';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -122,9 +123,8 @@ class MainPage extends React.Component {
     const { classes, theme } = this.props;
     const { open } = this.state;
     if(this.state.login === undefined) {
-        return <main className="container text-center">
-          <h1>Loading...</h1>
-        </main>;
+        return <LinearProgress/>
+         
       } else if(this.state.login) {
         return (
             <div className={classes.root}>

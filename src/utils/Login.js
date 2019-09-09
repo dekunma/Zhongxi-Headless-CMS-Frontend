@@ -2,30 +2,36 @@ import React, { Component } from 'react';
 import client from './feathers';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import { withStyles, Divider } from '@material-ui/core';
+import { withStyles} from '@material-ui/core';
 import PropTypes from 'prop-types';
-
+import ErrorMessage from './ErrorMessage'
+import Grid from '@material-ui/core/Grid';
 const styles = theme => ({
-    name:{
-        maxWidth:300,
-        margin:8,
+    title:{
+        marginTop:200,
+        marginBottom:15,
+        padding: theme.spacing.unit * 2,
+        textAlign: 'center',
+          },
+    text:{
+        textAlign:'center',
+        minWidth:250,
+        marginBottom:15,
+        marginTop:5
     },
-    keyvalue:{
-        margin:20,
-        minWidth:100,
-    },
-    add:{
-        margin:10,
-    },
-    send:{
-        margin:10,
+    button:{
+        minWidth:250,
+        marginBottom:15,
+        padding:12,
     }
+
   });
+
 
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {messageAppears:false};
   }
   updateField(name, ev) {
     this.setState({ [name]: ev.target.value });
@@ -38,7 +44,9 @@ class Login extends Component {
     return client.authenticate({
       strategy: 'local',
       email, password
-    }).catch(error => this.setState({ error }));
+    }).catch(error => {this.setState({ error });
+                        this.setState({messageAppears:true})
+                                        });
   }
 
   signup() {
@@ -53,38 +61,69 @@ class Login extends Component {
 
 
   render() {
-    // const {classes} = this.props;
+    const {classes} = this.props;
     return (
         <div>
-            <h1 className="font-100">Log in or signup</h1>
-            <p>{this.state.error && this.state.error.message}</p>
-            <Divider/>
-            <TextField
+          <ErrorMessage message={this.state.error && this.state.error.message} handleClick={this.state.messageAppears}></ErrorMessage>
+            <Grid container>
+              <Grid item md={4}></Grid>
+              <Grid item xs={12} md={4}><h1 className={classes.title}>WELCOME!</h1></Grid>
+              <Grid item md={4}></Grid>
+            </Grid>
+            
+            <Grid container>
+              <Grid item md={4}></Grid>
+              <Grid item xs={12} md={4} className={classes.text}>
+              <TextField
                                     label={"email"}
                                     onChange={ev => this.updateField('email', ev)}
                                     margin="normal"
                                     variant="outlined"
-                                    className="block"
                                     type="email"
                                     name="email"
+                                    className={classes.text}
             />
-            <Divider/>
-            <TextField
+              </Grid>
+              <Grid item md={4}></Grid>
+            </Grid>
+            
+            <Grid container>
+              <Grid item md={4}></Grid>
+              <Grid item xs={12} md={4} className={classes.text}>
+              <TextField
                                     label={"password"}
                                     onChange={ev => this.updateField('password', ev)}
                                     margin="normal"
                                     variant="outlined"
-                                    className="block"
                                     type="password"
                                     name="password"
+                                    className={classes.text}
             />
-            <Divider/>
-            <Button type="button" className="button button-primary block signup" onClick={() => this.login()}>
-              Log in
-            </Button>
-            <Button type="button" className="button button-primary block signup" onClick={() => this.signup()}>
-              Sign up
-            </Button>
+              </Grid>
+              <Grid item md={4}></Grid>
+            </Grid>
+
+            <Grid container>
+              <Grid item md={4}></Grid>
+              <Grid item xs={12} md={4} className={classes.text}>
+                  <Button variant="contained" className={classes.button} color="primary"onClick={() => this.login()}>
+                    Log in
+                  </Button>
+              </Grid>
+              <Grid item md={4}></Grid>
+            </Grid>
+
+            <Grid container>
+              <Grid item md={4}></Grid>
+              <Grid item xs={12} md={4} className={classes.text}>
+                <Button variant="contained" className={classes.button} color="secondary" onClick={() => this.signup()}>
+                Sign up
+                </Button>
+              </Grid>
+              <Grid item md={4}></Grid>
+            </Grid>
+
+            
         </div>
     )
   }
