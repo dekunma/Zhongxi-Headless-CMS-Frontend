@@ -94,7 +94,9 @@ class MainPage extends React.Component {
   }
   componentDidMount() {
     // Try to authenticate with the JWT stored in localStorage
-    client.authenticate().catch(() => this.setState({ login: null }));
+    client.authenticate()
+    // .then(()=>this.setState({login:true}))
+    .catch(() => this.setState({ login: null }));
 
    
     // On successfull login
@@ -102,7 +104,7 @@ class MainPage extends React.Component {
       // Get all users and messages
       Promise.all([
       ]).then( (e) => {
-        this.setState({ login });
+        this.setState({ login }, function(){console.log(this.state)});
       });
     });
   }
